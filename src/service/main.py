@@ -67,17 +67,15 @@ async def send_request(first=False) -> Set[Task]:
 
 def get_responses(tasks: Set[Task]) -> List[Response]:
     return [
-        task.result()
-        if task.result().status_code == 200 else {}
-        for task in tasks
+        task.result().json for task in tasks if task.result().status_code == 200
     ]
 
 
-async def main():
-    expected_time = to_seconds(1000)
+async def main(time: int, first=False):
+    expected_time = to_seconds(time)
     try:
         async with timeout(expected_time):
-            results = await send_request(first=True)
+            results = await send_request(first=first)
             return get_responses(results)
 
     except asyncio.TimeoutError:
@@ -89,7 +87,7 @@ if __name__ == '__main__':
 
     try:
         asyncio.set_event_loop(loop)
-        responses = loop.run_until_complete(main())
+        responses = loop.run_until_complete(main(1000))
     finally:
         loop.run_until_complete(loop.shutdown_asyncgens())
         loop.close()
