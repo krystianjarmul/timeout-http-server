@@ -1,54 +1,44 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from enum import Enum
 
-import asyncio
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ContentTypeError, TCPConnector
 
-
-
-
-@dataclass(frozen=True)
-class Response:
-    status_code: int
-    json: dict
-
+from src.domain.async_requests import Response
 
 
 class AbstractAsyncClient(ABC):
 
     async def get(self, url: str) -> Response:
-        response = await self._get(url)
-        return response
+        return await self._get(url)
 
     @abstractmethod
     async def _get(self, url: str):
         raise NotImplementedError
 
+    @abstractmethod
+    async def _parse_response(self, response) -> Response:
+        raise NotImplementedError
 
-class AioHttpAsyncClient:
 
-    def __aenter__(self):
-        self._session = ClientSession()
+class AiohttpClient(AbstractAsyncClient):
+    _session: ClientSession
+
+    def __init__(self):
+        self._session = ClientSession(connector=TCPConnector(ssl=False))
+
+    async def __aenter__(self):
         return self
 
-    # def __await__(self):
-    #     return self.new_sleep().__await__()
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self._session.close()
 
-    def __aexit__(self, exc_type, exc_val, exc_tb):
-        self._session.close()
-        self._session = None
-
-    async def get(self, url: str):
+    async def _get(self, url):
         async with self._session.get(url) as response:
             return await self._parse_response(response)
 
-    @staticmethod
-    async def new_sleep():
-        await asyncio.sleep(2)
-
-    @staticmethod
-    async def _parse_response(response) -> Response:
-        status_code = response.status
-        body = await response.json()
-        return Response(status_code, body)
+    async def _parse_response(self, response):
+        status = response.status
+        try:
+            body = await response.json()
+        except ContentTypeError:
+            body = await response.text()
+        return Response(status, body)
