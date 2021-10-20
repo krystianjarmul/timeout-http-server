@@ -74,4 +74,3 @@ async def test_run_executor_first_task_if_tie():
     responses = await executor.run(get_test_task_tie)
 
     assert responses == [Response(200, {"time": 300})]
-

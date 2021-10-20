@@ -1,5 +1,5 @@
 import asyncio
-from typing import Union, List, Type
+from typing import Union, List
 
 from async_timeout import timeout
 
@@ -13,12 +13,10 @@ class ExponeaHttpTestingClient:
         async_client: AbstractAsyncClient,
         async_executor: AbstractAsyncExecutor,
         wait_time: int,
-        first: bool = False,
     ):
         self._async_client = async_client
         self._async_executor = async_executor
         self._wait_time = self._to_seconds(wait_time)
-        self._first = first
 
     async def get(self, url: str) -> Union[List[dict], dict]:
         try:

@@ -3,14 +3,13 @@ from abc import ABC, abstractmethod
 import asyncio
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import List, Union
 from http import HTTPStatus
+from typing import List, Union
 
 
 def get_json(responses: List[Response]) -> List[dict]:
     return [
-        response.body
-        for response in responses
+        response.body for response in responses
         if response.status_code == HTTPStatus.OK
     ]
 
