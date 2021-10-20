@@ -48,3 +48,16 @@ async def test_aiohttp_client_get_returns_error_response_server_error():
         assert response == Response(
             HTTPStatus.TOO_MANY_REQUESTS, "Internal Server Error"
         )
+
+
+@pytest.mark.asyncio
+async def test_aiohttp_client_get_raises_client_connection_error():
+    fake_aiohttp_response = FakeResponse(HTTPStatus.REQUEST_TIMEOUT, None)
+    session = FakeSession(fake_aiohttp_response)
+
+    async with AiohttpClient(session) as client:
+        response = await client.get(URL)
+
+        assert response == Response(
+            HTTPStatus.REQUEST_TIMEOUT, "Request Timeout"
+        )

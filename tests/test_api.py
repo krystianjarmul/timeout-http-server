@@ -16,6 +16,7 @@ def test_api_all_success():
         response = client.get("/api/all/?time=1000")
 
         assert response.status_code == 200
+        assert response.json() == [{"time": 231}, {"time": 123}]
 
 
 def test_api_all_failed():

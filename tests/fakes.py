@@ -1,4 +1,6 @@
-from aiohttp import ContentTypeError
+from http import HTTPStatus
+
+from aiohttp import ContentTypeError, ClientConnectionError
 
 from src.adapters.external import AbstractAsyncClient
 from src.domain.async_requests import AbstractAsyncExecutor
@@ -35,6 +37,8 @@ class FakeSession:
         pass
 
     def get(self, url):
+        if self._response.status == HTTPStatus.REQUEST_TIMEOUT:
+            raise ClientConnectionError
         return self._response
 
 

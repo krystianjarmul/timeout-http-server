@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
+from http import HTTPStatus
 
-from aiohttp import ContentTypeError
-
+from aiohttp import ContentTypeError, ClientConnectionError
 from src.domain.async_requests import Response
 
 
@@ -30,8 +30,11 @@ class AiohttpClient(AbstractAsyncClient):
         await self._session.close()
 
     async def _get(self, url):
-        async with self._session.get(url) as response:
-            return await self._parse_response(response)
+        try:
+            async with self._session.get(url) as response:
+                return await self._parse_response(response)
+        except ClientConnectionError:
+            return Response(HTTPStatus.REQUEST_TIMEOUT, "Request Timeout")
 
     async def _parse_response(self, response):
         status = response.status
