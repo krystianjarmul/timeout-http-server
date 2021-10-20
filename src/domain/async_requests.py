@@ -3,13 +3,13 @@ from abc import ABC, abstractmethod
 import asyncio
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import List
+from typing import List, Union
 from http import HTTPStatus
 
 
 def get_json(responses: List[Response]) -> List[dict]:
     return [
-        response.json
+        response.body
         for response in responses
         if response.status_code == HTTPStatus.OK
     ]
@@ -18,13 +18,13 @@ def get_json(responses: List[Response]) -> List[dict]:
 @dataclass(frozen=True)
 class Response:
     status_code: int
-    json: dict
+    body: Union[dict, str]
 
 
 class AbstractAsyncExecutor(ABC):
     @abstractmethod
     def __init__(self, *args, **kwargs):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     async def _run(self, fn, *args, **kwargs):
@@ -36,15 +36,18 @@ class AbstractAsyncExecutor(ABC):
 
 class RequestAsyncExecutor(AbstractAsyncExecutor):
     def __init__(self, first: bool = False):
-        self.first = first
-        self.when = asyncio.FIRST_COMPLETED if first else asyncio.ALL_COMPLETED
+        self._first = first
+        self._when = asyncio.FIRST_COMPLETED if first else asyncio.ALL_COMPLETED
+        self._amount = 2
 
     async def _run(self, fn, *args, **kwargs) -> List[Response]:
-        tasks = [fn(*args, **kwargs) for _ in range(2)]
-        done, pending = await asyncio.wait(tasks, return_when=self.when)
+        tasks = [fn(*args, **kwargs) for _ in range(self._amount)]
+        done, pending = await asyncio.wait(tasks, return_when=self._when)
 
         if pending:
             await self._cancel_pending(pending)
+
+        done = self._break_the_tie(done)
 
         responses = [task.result() for task in done]
         return responses
@@ -56,3 +59,8 @@ class RequestAsyncExecutor(AbstractAsyncExecutor):
 
         with suppress(asyncio.CancelledError):
             await gather
+
+    def _break_the_tie(self, done: set) -> set:
+        if self._first and len(done) > 1:
+            return {next(iter(done))}
+        return done
