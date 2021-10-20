@@ -1,5 +1,3 @@
-import asyncio
-import pytest
 from asynctest import patch
 from fastapi.testclient import TestClient
 

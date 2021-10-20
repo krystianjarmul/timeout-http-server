@@ -26,20 +26,20 @@ class AbstractAsyncExecutor(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def _run(self, fn, *args, **kwargs):
+    async def _run(self, fn, *args, **kwargs) -> List[Response]:
         raise NotImplementedError
 
-    async def run(self, fn, *args, **kwargs):
+    async def run(self, fn, *args, **kwargs) -> List[Response]:
         return await self._run(fn, *args, **kwargs)
 
 
 class RequestAsyncExecutor(AbstractAsyncExecutor):
     def __init__(self, first: bool = False):
         self._first = first
-        self._when = asyncio.FIRST_COMPLETED if first else asyncio.ALL_COMPLETED
+        self._when = self._get_when()
         self._amount = 2
 
-    async def _run(self, fn, *args, **kwargs) -> List[Response]:
+    async def _run(self, fn, *args, **kwargs):
         tasks = [fn(*args, **kwargs) for _ in range(self._amount)]
         done, pending = await asyncio.wait(tasks, return_when=self._when)
 
@@ -63,3 +63,8 @@ class RequestAsyncExecutor(AbstractAsyncExecutor):
         if self._first and len(done) > 1:
             return {next(iter(done))}
         return done
+
+    def _get_when(self) -> str:
+        if self._first:
+            return asyncio.FIRST_COMPLETED
+        return asyncio.ALL_COMPLETED

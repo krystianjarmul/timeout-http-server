@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from http import HTTPStatus
 
 from aiohttp import ContentTypeError, ClientConnectionError
+
 from src.domain.async_requests import Response
 
 
@@ -10,7 +11,7 @@ class AbstractAsyncClient(ABC):
         return await self._get(url)
 
     @abstractmethod
-    async def _get(self, url: str):
+    async def _get(self, url: str) -> Response:
         raise NotImplementedError
 
     @abstractmethod
