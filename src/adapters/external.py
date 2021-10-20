@@ -42,3 +42,12 @@ class AiohttpClient(AbstractAsyncClient):
         except ContentTypeError:
             body = await response.text()
         return Response(status, body)
+
+
+class FakeAsyncClient(AbstractAsyncClient):
+
+    async def _get(self, url: str):
+        pass
+
+    async def _parse_response(self, response):
+        pass

@@ -7,10 +7,6 @@ from typing import Set, List
 from http import HTTPStatus
 
 
-def to_seconds(time: int) -> float:
-    return time / 1000
-
-
 def get_response_json(tasks: Set[Task]) -> List[dict]:
     return [
         task.result().json for task in tasks
@@ -26,12 +22,16 @@ class Response:
 
 class AbstractAsyncExecutor(ABC):
 
-    async def run(self, fn, *args, **kwargs):
-        return await self._run(fn, *args, **kwargs)
+    @abstractmethod
+    def __init__(self, *args, **kwargs):
+        pass
 
     @abstractmethod
     async def _run(self, fn, *args, **kwargs):
         raise NotImplementedError
+
+    async def run(self, fn, *args, **kwargs):
+        return await self._run(fn, *args, **kwargs)
 
 
 class RequestAsyncExecutor(AbstractAsyncExecutor):
