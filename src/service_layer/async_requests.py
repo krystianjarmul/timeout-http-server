@@ -4,7 +4,7 @@ from typing import Union, List, Type
 from async_timeout import timeout
 
 from src.adapters.external import AbstractAsyncClient
-from src.domain.async_requests import get_response_json, AbstractAsyncExecutor
+from src.domain.async_requests import get_json, AbstractAsyncExecutor
 
 
 class ExponeaHttpTestingClient:
@@ -25,9 +25,9 @@ class ExponeaHttpTestingClient:
             async with timeout(self._wait_time):
                 async with self._async_client() as client:
                     executor = self._async_executor(first=self._first)
-                    tasks = await executor.run(client.get, url)
-                    response = get_response_json(tasks)
-                    return response
+                    responses = await executor.run(client.get, url)
+                    response_json = get_json(responses)
+                    return response_json
 
         except asyncio.TimeoutError:
             return {}
