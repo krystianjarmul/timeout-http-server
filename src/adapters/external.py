@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from aiohttp import ClientSession, ContentTypeError
+from aiohttp import ContentTypeError
 
 from src.domain.async_requests import Response
 
@@ -19,10 +19,9 @@ class AbstractAsyncClient(ABC):
 
 
 class AiohttpClient(AbstractAsyncClient):
-    _session: ClientSession
 
-    def __init__(self):
-        self._session = ClientSession()
+    def __init__(self, session):
+        self._session = session
 
     async def __aenter__(self):
         return self
@@ -41,17 +40,3 @@ class AiohttpClient(AbstractAsyncClient):
         except ContentTypeError:
             body = await response.text()
         return Response(status, body)
-
-
-class FakeAsyncClient(AbstractAsyncClient):
-    async def __aenter__(self):
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        pass
-
-    async def _get(self, url):
-        return Response(200, {"time": 200})
-
-    async def _parse_response(self, response):
-        pass

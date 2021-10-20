@@ -10,8 +10,8 @@ from src.domain.async_requests import get_json, AbstractAsyncExecutor
 class ExponeaHttpTestingClient:
     def __init__(
         self,
-        async_client: Type[AbstractAsyncClient],
-        async_executor: Type[AbstractAsyncExecutor],
+        async_client: AbstractAsyncClient,
+        async_executor: AbstractAsyncExecutor,
         wait_time: int,
         first: bool = False,
     ):
@@ -23,8 +23,8 @@ class ExponeaHttpTestingClient:
     async def get(self, url: str) -> Union[List[dict], dict]:
         try:
             async with timeout(self._wait_time):
-                async with self._async_client() as client:
-                    executor = self._async_executor(first=self._first)
+                async with self._async_client as client:
+                    executor = self._async_executor
                     responses = await executor.run(client.get, url)
                     response_json = get_json(responses)
                     return response_json

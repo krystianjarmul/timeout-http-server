@@ -15,7 +15,7 @@ async def get_test_task():
 
 
 async def get_test_task_tie():
-    await asyncio.sleep(0.03)
+    await asyncio.sleep(0.01)
     return Response(200, {"time": 300})
 
 
@@ -59,7 +59,7 @@ async def test_run_executor_all_tasks():
 
 
 @pytest.mark.asyncio
-async def test_run_executor_first_task_if_tie():
+async def test_run_executor_first_task():
     executor = RequestAsyncExecutor(first=True)
 
     responses = await executor.run(get_test_task)
@@ -68,9 +68,10 @@ async def test_run_executor_first_task_if_tie():
 
 
 @pytest.mark.asyncio
-async def test_run_executor_first_task():
+async def test_run_executor_first_task_if_tie():
     executor = RequestAsyncExecutor(first=True)
 
-    responses = await executor.run(get_test_task)
+    responses = await executor.run(get_test_task_tie)
 
     assert responses == [Response(200, {"time": 300})]
+
