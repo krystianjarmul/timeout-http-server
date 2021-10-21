@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 from aiohttp import ContentTypeError, ClientConnectionError
 
-from src.domain.async_requests import Response
+from src.timeout.domain.async_requests import Response
 
 
 class AbstractAsyncClient(ABC):

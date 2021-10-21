@@ -4,8 +4,8 @@ from typing import Union, List
 from aiohttp import ClientSession
 from async_timeout import timeout
 
-from src.adapters.external import AbstractAsyncClient, AiohttpClient
-from src.domain.async_requests import (
+from src.timeout.adapters.external import AbstractAsyncClient, AiohttpClient
+from src.timeout.domain.async_requests import (
     get_json, AbstractAsyncExecutor, RequestAsyncExecutor
 )
 

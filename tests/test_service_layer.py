@@ -2,8 +2,8 @@ import asyncio
 import pytest
 from asynctest import patch
 
-from src.domain.async_requests import Response
-from src.service_layer.services import HttpTestingClient
+from src.timeout.domain.async_requests import Response
+from src.timeout.service_layer.services import HttpTestingClient
 
 from .fakes import FakeAsyncClient, FakeAsyncExecutor, URL
 
@@ -65,7 +65,7 @@ async def test_http_testing_client_success_all_responses_one_failed():
     )
 
     with patch(
-            "src.service_layer.services.timeout",
+            "src.timeout.service_layer.services.timeout",
             side_effect=asyncio.TimeoutError
     ):
         client = HttpTestingClient(

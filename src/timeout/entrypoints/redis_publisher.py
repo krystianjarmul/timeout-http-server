@@ -2,8 +2,8 @@ import json
 
 import redis
 
-from src.config import get_redis_host_and_port
-from src.domain.events import Event
+from src.timeout.config import get_redis_host_and_port
+from src.timeout.domain.events import Event
 
 r = redis.Redis(**get_redis_host_and_port())
 

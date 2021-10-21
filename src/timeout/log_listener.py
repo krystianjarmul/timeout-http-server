@@ -2,8 +2,8 @@ import logging
 
 import redis
 
-from src.config import get_redis_host_and_port
-from src.domain.handlers import handle_events
+from src.timeout.config import get_redis_host_and_port
+from src.timeout.domain.handlers import handle_events
 
 logger = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ from contextlib import suppress
 from http import HTTPStatus
 from typing import List
 
-from src.domain.model import Response
+from src.timeout.domain.model import Response
 
 
 def get_json(responses: List[Response]) -> List[dict]:

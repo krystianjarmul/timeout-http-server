@@ -2,8 +2,8 @@ from http import HTTPStatus
 
 import pytest
 
-from src.adapters.external import AiohttpClient
-from src.domain.async_requests import Response
+from src.timeout.adapters.external import AiohttpClient
+from src.timeout.domain.async_requests import Response
 from tests.fakes import FakeSession, FakeResponse, URL
 
 

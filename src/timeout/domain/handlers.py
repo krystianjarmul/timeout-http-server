@@ -1,8 +1,8 @@
 import json
 import logging
 
-from src.domain.events import AllSuccess, FirstSuccess, Failed
-from src.domain.model import EventType
+from src.timeout.domain.events import AllSuccess, FirstSuccess, Failed
+from src.timeout.domain.model import EventType
 
 logger = logging.getLogger()
 

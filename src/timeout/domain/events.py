@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from typing import List
 
-from src.domain.model import EventType
+from src.timeout.domain.model import EventType
 
 
 class Event:

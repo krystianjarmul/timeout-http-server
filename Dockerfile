@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 RUN pip install wait-for-it
 
 COPY run.sh .
-COPY log_listener.py .
+COPY src/timeout/log_listener.py .
 COPY src/ src/
 COPY tests/ tests/

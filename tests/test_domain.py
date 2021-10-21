@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from src.domain.async_requests import Response, get_json, RequestAsyncExecutor
+from src.timeout.domain.async_requests import Response, get_json, RequestAsyncExecutor
 
 test_delay = 0.01
 

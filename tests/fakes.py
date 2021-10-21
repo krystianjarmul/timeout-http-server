@@ -2,9 +2,9 @@ from http import HTTPStatus
 
 from aiohttp import ContentTypeError, ClientConnectionError
 
-from src.adapters.external import AbstractAsyncClient
-from src.domain.async_requests import AbstractAsyncExecutor
-from src.domain.async_requests import Response
+from src.timeout.adapters.external import AbstractAsyncClient
+from src.timeout.domain.async_requests import AbstractAsyncExecutor
+from src.timeout.domain.async_requests import Response
 
 URL = "https://exponea-engineering-assignment.appspot.com/api/work"
 
