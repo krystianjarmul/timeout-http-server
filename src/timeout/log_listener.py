@@ -2,15 +2,15 @@ import logging
 
 import redis
 
-from src.timeout.config import get_redis_host_and_port
-from src.timeout.domain.handlers import handle_events
+from timeout.config import get_redis_host_and_port
+from timeout.domain.handlers import handle_events
 
 logger = logging.getLogger(__name__)
 
 r = redis.Redis(**get_redis_host_and_port())
 
 
-def main():
+def listen():
     logger.info("Redis pubsub starting")
     pubsub = r.pubsub(ignore_subscribe_messages=True)
     pubsub.subscribe("timeout")
@@ -19,4 +19,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    listen()

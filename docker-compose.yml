@@ -23,4 +23,4 @@ services:
       - ./src:/src
     env_file:
       - .env
-    command: python log_listener.py
+    command: python timeout/log_listener.py

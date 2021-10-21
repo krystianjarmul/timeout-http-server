@@ -2,10 +2,10 @@ from typing import List, Union
 
 from fastapi import FastAPI, Response, status
 
-from src.timeout.domain.events import AllSuccess, Failed, FirstSuccess
-from src.timeout.domain.model import EventType
-from src.timeout.entrypoints.redis_publisher import publish
-from src.timeout.service_layer.services import get_response
+from timeout.domain.events import AllSuccess, Failed, FirstSuccess
+from timeout.domain.model import EventType
+from timeout.entrypoints.redis_publisher import publish
+from timeout.service_layer.services import get_response
 
 app = FastAPI()
 URL = "https://exponea-engineering-assignment.appspot.com/api/work"
