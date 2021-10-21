@@ -26,5 +26,5 @@ API docs: http://localhost:8000/docs
 ## Testing
 Run tests:
 ```
-docker-compose exec api sh -c "pytest"
+docker-compose run --rm --no-deps --entrypoint=pytest api /tests/
 ```
