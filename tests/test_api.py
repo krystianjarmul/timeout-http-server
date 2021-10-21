@@ -8,7 +8,7 @@ client = TestClient(app)
 
 def test_api_all_success():
     with patch(
-            "src.entrypoints.api.ExponeaHttpTestingClient.get",
+            "src.entrypoints.api.get_response",
             return_value=[{"time": 231}, {"time": 123}]
     ):
         response = client.get("/api/all/?time=1000")
@@ -19,7 +19,7 @@ def test_api_all_success():
 
 def test_api_all_failed():
     with patch(
-            "src.entrypoints.api.ExponeaHttpTestingClient.get",
+            "src.entrypoints.api.get_response",
             return_value={}
     ):
         response = client.get("/api/all/?time=1")
@@ -30,7 +30,7 @@ def test_api_all_failed():
 
 def test_api_first_success():
     with patch(
-            "src.entrypoints.api.ExponeaHttpTestingClient.get",
+            "src.entrypoints.api.get_response",
             return_value=[{"time": 123}]
     ):
         response = client.get("/api/first/?time=1000")
@@ -41,7 +41,7 @@ def test_api_first_success():
 
 def test_api_first_failed():
     with patch(
-            "src.entrypoints.api.ExponeaHttpTestingClient.get",
+            "src.entrypoints.api.get_response",
             return_value={}
     ):
         response = client.get("/api/first/?time=1")

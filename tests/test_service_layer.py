@@ -3,7 +3,7 @@ import pytest
 from asynctest import patch
 
 from src.domain.async_requests import Response
-from src.service_layer.async_requests import ExponeaHttpTestingClient
+from src.service_layer.services import HttpTestingClient
 
 from .fakes import FakeAsyncClient, FakeAsyncExecutor, URL
 
@@ -16,7 +16,7 @@ async def test_http_testing_client_success_all_responses():
         [Response(200, {"time": 320}), Response(200, {"time": 320})]
     )
 
-    client = ExponeaHttpTestingClient(
+    client = HttpTestingClient(
         fake_async_client, fake_executor, wait_time=1000
     )
     response_json = await client.get(URL)
@@ -32,7 +32,7 @@ async def test_http_testing_client_success_first_response():
         [Response(200, {"time": 320}), Response(200, {"time": 320})]
     )
 
-    client = ExponeaHttpTestingClient(
+    client = HttpTestingClient(
         fake_async_client, fake_executor, wait_time=1000
     )
     response_json = await client.get(URL)
@@ -48,7 +48,7 @@ async def test_http_testing_client_success_all_responses_one_failed():
         [Response(200, {"time": 320}), Response(500, "Internal Server Error")]
     )
 
-    client = ExponeaHttpTestingClient(
+    client = HttpTestingClient(
         fake_async_client, fake_executor, wait_time=1000
     )
     response_json = await client.get(URL)
@@ -65,10 +65,10 @@ async def test_http_testing_client_success_all_responses_one_failed():
     )
 
     with patch(
-            "src.service_layer.async_requests.timeout",
+            "src.service_layer.services.timeout",
             side_effect=asyncio.TimeoutError
     ):
-        client = ExponeaHttpTestingClient(
+        client = HttpTestingClient(
             fake_async_client, fake_executor, wait_time=100
         )
         response_json = await client.get(URL)

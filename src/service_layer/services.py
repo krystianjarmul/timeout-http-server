@@ -1,18 +1,21 @@
 import asyncio
 from typing import Union, List
 
+from aiohttp import ClientSession
 from async_timeout import timeout
 
-from src.adapters.external import AbstractAsyncClient
-from src.domain.async_requests import get_json, AbstractAsyncExecutor
+from src.adapters.external import AbstractAsyncClient, AiohttpClient
+from src.domain.async_requests import (
+    get_json, AbstractAsyncExecutor, RequestAsyncExecutor
+)
 
 
-class ExponeaHttpTestingClient:
+class HttpTestingClient:
     def __init__(
-        self,
-        async_client: AbstractAsyncClient,
-        async_executor: AbstractAsyncExecutor,
-        wait_time: int,
+            self,
+            async_client: AbstractAsyncClient,
+            async_executor: AbstractAsyncExecutor,
+            wait_time: int,
     ):
         self._async_client = async_client
         self._async_executor = async_executor
@@ -33,3 +36,14 @@ class ExponeaHttpTestingClient:
     @staticmethod
     def _to_seconds(time: int) -> float:
         return time / 1000
+
+
+async def get_response(url: str, time: int) -> Union[List[dict], dict]:
+    session = ClientSession()
+    client = HttpTestingClient(
+        AiohttpClient(session),
+        RequestAsyncExecutor(),
+        time
+    )
+    response = await client.get(url)
+    return response

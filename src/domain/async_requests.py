@@ -2,9 +2,10 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 import asyncio
 from contextlib import suppress
-from dataclasses import dataclass
 from http import HTTPStatus
-from typing import List, Union
+from typing import List
+
+from src.domain.model import Response
 
 
 def get_json(responses: List[Response]) -> List[dict]:
@@ -12,12 +13,6 @@ def get_json(responses: List[Response]) -> List[dict]:
         response.body for response in responses
         if response.status_code == HTTPStatus.OK
     ]
-
-
-@dataclass(frozen=True)
-class Response:
-    status_code: int
-    body: Union[dict, str]
 
 
 class AbstractAsyncExecutor(ABC):
