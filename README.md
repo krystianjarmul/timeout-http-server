@@ -23,5 +23,8 @@ http://localhost:8000/
 
 API docs: http://localhost:8000/docs
 
-
-
+## Testing
+Run tests:
+```
+docker-compose exec api sh -c "pytest"
+```
