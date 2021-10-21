@@ -4,7 +4,7 @@ import logging
 from src.domain.events import AllSuccess, FirstSuccess, Failed
 from src.domain.model import EventType
 
-logger = logging.getLogger("LOGS")
+logger = logging.getLogger()
 
 
 def handle_events(message: dict):

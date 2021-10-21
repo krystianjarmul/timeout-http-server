@@ -17,7 +17,7 @@ async def test_http_testing_client_success_all_responses():
     )
 
     client = HttpTestingClient(
-        fake_async_client, fake_executor, wait_time=1000
+        fake_async_client, fake_executor, timeout=1000
     )
     response_json = await client.get(URL)
 
@@ -33,7 +33,7 @@ async def test_http_testing_client_success_first_response():
     )
 
     client = HttpTestingClient(
-        fake_async_client, fake_executor, wait_time=1000
+        fake_async_client, fake_executor, timeout=1000
     )
     response_json = await client.get(URL)
 
@@ -49,7 +49,7 @@ async def test_http_testing_client_success_all_responses_one_failed():
     )
 
     client = HttpTestingClient(
-        fake_async_client, fake_executor, wait_time=1000
+        fake_async_client, fake_executor, timeout=1000
     )
     response_json = await client.get(URL)
 
@@ -69,7 +69,7 @@ async def test_http_testing_client_success_all_responses_one_failed():
             side_effect=asyncio.TimeoutError
     ):
         client = HttpTestingClient(
-            fake_async_client, fake_executor, wait_time=100
+            fake_async_client, fake_executor, timeout=100
         )
         response_json = await client.get(URL)
 

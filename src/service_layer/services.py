@@ -15,15 +15,15 @@ class HttpTestingClient:
             self,
             async_client: AbstractAsyncClient,
             async_executor: AbstractAsyncExecutor,
-            wait_time: int,
+            timeout: int,
     ):
         self._async_client = async_client
         self._async_executor = async_executor
-        self._wait_time = self._to_seconds(wait_time)
+        self._timeout = self._to_seconds(timeout)
 
     async def get(self, url: str) -> Union[List[dict], dict]:
         try:
-            async with timeout(self._wait_time):
+            async with timeout(self._timeout):
                 async with self._async_client as client:
                     executor = self._async_executor
                     responses = await executor.run(client.get, url)
