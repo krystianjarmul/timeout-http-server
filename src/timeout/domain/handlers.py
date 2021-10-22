@@ -34,6 +34,6 @@ def handle_first_success(data: dict):
 
 def handle_failed(data: dict):
     event = Failed(data["event_type"], data["timeout"], data["error"])
-    logger.info(
+    logger.error(
         f"Failure for timeout {event.timeout}ms, got an {event.error}."
     )
